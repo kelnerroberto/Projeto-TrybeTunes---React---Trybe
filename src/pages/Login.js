@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router';
 import { createUser } from '../services/userAPI';
+import Loading from './Loading';
 
 class Login extends Component {
   constructor() {
@@ -8,6 +10,8 @@ class Login extends Component {
     this.state = {
       disabled: true,
       name: '',
+      isLogged: false,
+      redirect: false,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -28,13 +32,23 @@ class Login extends Component {
     });
   }
 
-  loadingAndCreateUser() {
+  async loadingAndCreateUser() {
     const { name } = this.state;
-    createUser({ name });
+    this.setState({ isLogged: true });
+    await createUser({ name });
+    this.setState({ redirect: true });
   }
 
   render() {
-    const { disabled } = this.state;
+    const { disabled, isLogged, redirect } = this.state;
+    if (isLogged) {
+      return (
+        <>
+          <Loading />
+          { redirect ? <Redirect to="/search" /> : '' }
+        </>
+      );
+    }
     return (
       <div data-testid="page-login">
         <input
@@ -55,5 +69,7 @@ class Login extends Component {
     );
   }
 }
+
+// Renderização condicional extraída de: https://pt-br.reactjs.org/docs/conditional-rendering.html.
 
 export default Login;
