@@ -65,7 +65,7 @@ class Search extends Component {
           </button>
         </form>
         {searchedAlbums.length > 0
-          ? searchedAlbumsList : ''}
+          ? searchedAlbumsList : <p>Nenhum álbum foi encontrado</p>}
       </div>
     );
   }

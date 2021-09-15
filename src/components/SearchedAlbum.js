@@ -14,8 +14,11 @@ class SearchedAlbum extends React.Component {
           {
             arrayOfAlbumObject
               .map((eachAlbum) => (
-                <li key={ eachAlbum.id }>
-                  <Link to={ `/${eachAlbum.id}` }>
+                <li key={ eachAlbum.collectionId }>
+                  <Link
+                    to={ `/album/${eachAlbum.collectionId}` }
+                    data-testid={ `link-to-album-${eachAlbum.collectionId}` }
+                  >
                     <img
                       src={ eachAlbum.artworkUrl100 }
                       alt={ `${eachAlbum.collectionName} album` }
