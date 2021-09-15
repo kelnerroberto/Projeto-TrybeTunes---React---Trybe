@@ -21,7 +21,7 @@ class Search extends Component {
     const { name } = this.state;
     const MIN_CHARACTERS_USERNAME = 2;
     return (
-      <div data-testid="page-search">
+      <form data-testid="page-search">
         <input
           type="text"
           data-testid="search-artist-input"
@@ -34,7 +34,7 @@ class Search extends Component {
         >
           Pesquisar
         </button>
-      </div>
+      </form>
     );
   }
 }
