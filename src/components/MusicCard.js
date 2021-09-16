@@ -11,49 +11,62 @@ class MusicCard extends React.Component {
       loading: false,
       favoriteSongs: [],
     };
+
+    this.addToFavoriteSongs = this.addToFavoriteSongs.bind(this);
   }
 
-  async addToFavoriteSongs({ target: { checked } }, musicsFromAlbum) {
-    const { favoriteSongs } = this.state;
-    if (checked) {
-      this.setState({
-        favoriteSongs: [...favoriteSongs, musicsFromAlbum],
-      });
-    }
+  addToFavoriteSongs = async ({ target: { checked } }, musicsFromAlbum) => {
+    const {favoriteSongs} = this.state;
+    this.setState({
+      loading: true,
+      favoriteSongs: [...favoriteSongs, musicsFromAlbum],
+    });
     console.log(favoriteSongs);
+    if (checked) {
+      await addSong(musicsFromAlbum);
+    }
+    if (!checked) await removeSong(musicsFromAlbum);
+    this.setState({
+      loading: false,
+    });
   }
 
   render() {
     const { musicsFromAlbum } = this.props;
+    const { loading } = this.state;
+    const musicMapped = (
+      <ul>
+        { musicsFromAlbum.slice(1)
+          .map((eachMusic) => (
+            <li key={ eachMusic.trackId }>
+              <p>{eachMusic.trackName}</p>
+              <audio
+                data-testid="audio-component"
+                src={ eachMusic.previewUrl }
+                controls
+              >
+                <track kind="captions" />
+                O seu navegador não suporta o elemento
+                {' '}
+                <code>audio</code>
+                .
+              </audio>
+              <label
+                data-testid={ `checkbox-music-${eachMusic.trackId}` }
+                htmlFor={ eachMusic.trackId }
+              >
+                <input
+                  type="checkbox"
+                  id={ eachMusic.trackId }
+                  onChange={ (event) => this.addToFavoriteSongs(event, eachMusic) }
+                />
+              </label>
+            </li>)) }
+      </ul>);
+
     return (
       <div>
-        <ul>
-          { musicsFromAlbum.slice(1)
-            .map((eachMusic) => (
-              <li key={ eachMusic.trackId }>
-                <p>{eachMusic.trackName}</p>
-                <audio
-                  data-testid="audio-component"
-                  src={ eachMusic.previewUrl }
-                  controls
-                >
-                  <track kind="captions" />
-                  O seu navegador não suporta o elemento
-                  {' '}
-                  <code>audio</code>
-                  .
-                </audio>
-                <label
-                  data-testid={ `checkbox-music-${eachMusic.trackId}` }
-                  htmlFor={ eachMusic.trackId }
-                >
-                  <input
-                    type="checkbox"
-                    onClick={ (event) => this.addToFavoriteSongs(event, eachMusic) }
-                  />
-                </label>
-              </li>)) }
-        </ul>
+        {loading ? <Loading /> : musicMapped}
       </div>
     );
   }
