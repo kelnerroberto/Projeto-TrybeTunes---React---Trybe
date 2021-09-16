@@ -9,56 +9,65 @@ class MusicCard extends React.Component {
 
     this.state = {
       loading: false,
+      isChecked: false,
     };
 
     this.addToFavoriteSongs = this.addToFavoriteSongs.bind(this);
   }
 
-  addToFavoriteSongs = async ({ target: { checked } }, musicsFromAlbum) => {
+  addToFavoriteSongs = async ({ target: { checked, id } }) => {
     this.setState({
       loading: true,
     });
-    if (checked) {
-      await addSong(musicsFromAlbum);
+    const { isChecked } = this.state;
+    if (isChecked) {
+      await removeSong(id);
+      this.setState({
+        isChecked: !checked,
+        loading: false,
+      });
+    } else {
+      await addSong(id);
+      this.setState({
+        isChecked: checked,
+        loading: false,
+      });
     }
-    if (!checked) await removeSong(musicsFromAlbum);
-    this.setState({
-      loading: false,
-    });
   }
 
   render() {
     const { musicsFromAlbum } = this.props;
-    const { loading } = this.state;
+    const { loading, isChecked } = this.state;
     const musicMapped = (
       <ul>
-        { musicsFromAlbum.slice(1)
-          .map((eachMusic) => (
-            <li key={ eachMusic.trackId }>
-              <p>{eachMusic.trackName}</p>
-              <audio
-                data-testid="audio-component"
-                src={ eachMusic.previewUrl }
-                controls
-              >
-                <track kind="captions" />
-                O seu navegador não suporta o elemento
-                {' '}
-                <code>audio</code>
-                .
-              </audio>
-              <label
-                data-testid={ `checkbox-music-${eachMusic.trackId}` }
-                htmlFor={ eachMusic.trackId }
-              >
-                <input
-                  type="checkbox"
-                  id={ eachMusic.trackId }
-                  onClick={ (event) => this.addToFavoriteSongs(event, eachMusic) }
-                />
-              </label>
-            </li>)) }
-      </ul>);
+        {' '}
+        <li key={ musicsFromAlbum.trackId }>
+          <p>{musicsFromAlbum.trackName}</p>
+          <audio
+            data-testid="audio-component"
+            src={ musicsFromAlbum.previewUrl }
+            controls
+          >
+            <track kind="captions" />
+            O seu navegador não suporta o elemento
+            {' '}
+            <code>audio</code>
+            .
+          </audio>
+          <label
+            data-testid={ `checkbox-music-${musicsFromAlbum.trackId}` }
+            htmlFor={ musicsFromAlbum.trackId }
+          >
+            <input
+              type="checkbox"
+              id={ musicsFromAlbum.trackId }
+              onChange={ this.addToFavoriteSongs }
+              checked={ isChecked }
+            />
+          </label>
+        </li>
+      </ul>
+    );
 
     return (
       <div>

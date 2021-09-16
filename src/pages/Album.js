@@ -37,9 +37,10 @@ class Album extends Component {
         <h2 data-testid="artist-name">{ musicArtist }</h2>
         <h3 data-testid="album-name">{ albumName }</h3>
         <div>
-          { loading ? <MusicCard
-            musicsFromAlbum={ musicsOfAlbum }
-          />
+          { loading ? musicsOfAlbum.slice(1).map((eachMusic) => (<MusicCard
+            musicsFromAlbum={ eachMusic }
+            key={ eachMusic.trackId }
+          />))
             : ''}
         </div>
       </div>
