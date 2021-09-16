@@ -9,19 +9,15 @@ class MusicCard extends React.Component {
 
     this.state = {
       loading: false,
-      favoriteSongs: [],
     };
 
     this.addToFavoriteSongs = this.addToFavoriteSongs.bind(this);
   }
 
   addToFavoriteSongs = async ({ target: { checked } }, musicsFromAlbum) => {
-    const {favoriteSongs} = this.state;
     this.setState({
       loading: true,
-      favoriteSongs: [...favoriteSongs, musicsFromAlbum],
     });
-    console.log(favoriteSongs);
     if (checked) {
       await addSong(musicsFromAlbum);
     }
@@ -58,7 +54,7 @@ class MusicCard extends React.Component {
                 <input
                   type="checkbox"
                   id={ eachMusic.trackId }
-                  onChange={ (event) => this.addToFavoriteSongs(event, eachMusic) }
+                  onClick={ (event) => this.addToFavoriteSongs(event, eachMusic) }
                 />
               </label>
             </li>)) }
