@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import Header from '../components/Header';
 
 class NotFound extends Component {
   render() {
     return (
-      <div data-testid="page-not-found">
-        oi
-      </div>
+      <>
+        <Header />
+        <div data-testid="page-not-found">
+          Álbum não encontrado
+        </div>
+      </>
     );
   }
 }

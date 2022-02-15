@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import Loading from './Loading';
 import SearchedAlbum from '../components/SearchedAlbum';
+import Header from '../components/Header';
 
 class Search extends Component {
   constructor() {
@@ -48,6 +49,7 @@ class Search extends Component {
     />);
     return (
       <div>
+        <Header />
         <form data-testid="page-search">
           <input
             type="text"
